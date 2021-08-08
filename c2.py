@@ -10,38 +10,21 @@ def _hexColorToRgb(str):
 
 def _getMatchingColorRange(rgb):
     #      (r=0/g=1/b=1,  value)
-    lowest = (-1, 999999)
     highest = (-1, -999999)
 
     for i, c in enumerate(rgb):
         if c > highest[1]:
             highest = (i, c)
-        else: # if c <= lowest[1]
-            lowest = (i, c)
     
-    # composante extreme = la plus grande (proche de 255)
-    if 255-highest[1] < lowest[1]:
-        # red
-        if highest[0] == 0:
-            return range(580, 701)
-        # green
-        elif highest[0] == 1:
-            return range(490, 581)
-        # blue
-        elif highest[0] == 2:
-            return range(420, 491)
-
-    # composante extreme = la plus petite (proche de 0)
-    else:
-        # red
-        if lowest[0] == 0:
-            return range(440, 511)
-        # green
-        elif lowest[0] == 1:
-            return range(0, 441)
-        # blue
-        elif lowest[0] == 2:
-            return range(510, 781)
+    # red
+    if highest[0] == 0:
+        return range(580, 701)
+    # green
+    elif highest[0] == 1:
+        return range(490, 581)
+    # blue
+    elif highest[0] == 2:
+        return range(420, 491)
 
     return []
 
