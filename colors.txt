@@ -1,0 +1,39 @@
+Pouvoir ordonner les nombres de la séquence Mk en associant chaque nombre à un
+code hexadicemal de couleur (ex: #142857) selon le spectre des longueurs d'ondes visibles.
+
+Pour ça on va faire une liste avec tous les codes rgb des longueurs d'ondes de 380 à 780
+puis on fait une fonction pour savoir quel code rgb se rapproche le plus de mon code hex, 
+et enfin retrouver la longueur d'onde. 
+Donc je finis par associer à mon code hex une longueur d'onde (qui est un entier entre 380 et 780),
+et je peux alors comporar les codes hex en fonction de ça.
+
+
+On commence par trouver la composante rgb avec la valeur la plus petite, on consièrera qu'il s'agit de 00.
+Donc #142857 deviendra #002857.
+
+
+D'abord on cherche quel composante est la plus extrême (proche de 0 ou de f).
+
+
+Si la composante rgb avec la plus petite valeur est r,
+alors ça sera compris entre 440nm et 511nm (non compris)
+
+Si la composante rgb avec la plus petite valeur est g,
+alors ça sera compris entre 0 et 441nm (non compris)
+et en 645 et et 781nm (non compris)
+
+Si la composante rgb avec la plus petite valeur est b,
+alors ça sera compris entre 510 et 781 (non compris)
+
+
+
+Si la composante rgb avec la plus grande valeur est r,
+alors ça sera compris entre 580 et 701nm (non compris)
+
+Si la composante rgb avec la plus grande valeur est g,
+alors ça sera compris entre 490 et 581 (non compris)
+
+Si la composante rgb avec la plus grande valeur est b,
+alors ça sera compris entre 420 et 491 (non compris)
+
+
