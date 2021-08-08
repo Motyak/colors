@@ -47,17 +47,14 @@ def closestWavelength(hexColor):
     smallestDifference = 999999
     
     for index, c in enumerate(colorRangeRgb):
-        # print("nm ", index + 380) #debug
         diff = _howmuchdifference(rgbInput, c)
-        # print(rgbInput, c, diff) #debug
         if diff < smallestDifference:
             closestRGB = c
             closestWavelength = index + colorRangeNm[0]
             smallestDifference = diff
-            # print(closestRGB, ";", closestWavelength, ";", smallestDifference) #debug
 
-    # print(closestRGB)#debug
     return closestWavelength
 
-print(closestWavelength("#285714"))
+if __name__ == '__main__':
+    print(closestWavelength("#285714"))
 

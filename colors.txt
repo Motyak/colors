@@ -1,3 +1,10 @@
+Pour pouvoir convertir rapidement nm en hex code:
+https://academo.org/demos/wavelength-to-colour-relationship/
+
+Pour pouvoir voir la couleur et les composantes rgb d'un hex code :
+GOOGLE
+
+
 Pouvoir ordonner les nombres de la séquence Mk en associant chaque nombre à un
 code hexadicemal de couleur (ex: #142857) selon le spectre des longueurs d'ondes visibles.
 
