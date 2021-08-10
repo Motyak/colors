@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+from colorsys import rgb_to_hls
+from math import pi as PI
+
 _rgb = {
     440: lambda x: (-(x-440)/(440-380),0.0,1.0),
     490: lambda x: (0.0,(x-440)/(490-440),1.0),
@@ -27,8 +30,13 @@ def _getFactor(wavelength):
         if wavelength < sep:
             return _fac[sep](wavelength)
 
-# adapt color and convert dec to 0-255
+# adapt color and return dec values
 def _apply(factor, colors):
+    GAMMA = 0.80
+    return map(lambda x: (x * factor) ** GAMMA, colors)
+
+# adapt color and convert dec to 0-255
+def _applyAndConvertToRgb(factor, colors):
     GAMMA, MAX_INTENSITY = 0.80, 255
     return map(lambda x: round(MAX_INTENSITY * (x * factor) ** GAMMA), colors)
 
@@ -36,12 +44,12 @@ def _isInSpectrum(wavelength):
     return wavelength >= 380 and wavelength <= 780
 
 def nmToRgb(wavelength):
-    red = green = blue = 0.0
+    # red = green = blue = 0.0
 
     if not _isInSpectrum(wavelength):
         return
     
-    red, green, blue = _apply(_getFactor(wavelength), _getRgbDec(wavelength))
+    red, green, blue = _applyAndConvertToRgb(_getFactor(wavelength), _getRgbDec(wavelength))
 
     return (int(red),int(green),int(blue))
 
@@ -51,6 +59,17 @@ def _rgbToHexColor(rgb):
 def nmToHex(wavelength):
     return _rgbToHexColor(nmToRgb(wavelength))
 
+def nmToHsl(wavelength):
+    if not _isInSpectrum(wavelength):
+        return
+
+    red, green, blue =  _apply(_getFactor(wavelength), _getRgbDec(wavelength))
+    hls = rgb_to_hls(red, green, blue)
+
+    # hls to proper hsl
+    return (hls[0] * 360, hls[2] * 100, hls[1] * 100)
+
 if __name__ == '__main__':
-    print(nmToRgb(592))
-    print(nmToHex(780))
+    print(nmToRgb(380))
+    print(nmToHex(380))
+    print(nmToHsl(380))
