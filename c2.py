@@ -2,9 +2,9 @@
 from c import nmToHsl
 
 from colorsys import rgb_to_hls
-from colormath.color_objects import HSLColor, LabColor
-from colormath.color_conversions import convert_color
-from colormath.color_diff import delta_e_cie1976
+# from colormath.color_objects import HSLColor, LabColor
+# from colormath.color_conversions import convert_color
+# from colormath.color_diff import delta_e_cie1976
 
 # hex string to HSL
 def _hexColorToHsl(str):
@@ -18,12 +18,12 @@ def _hexColorToHsl(str):
     return (hls[0] * 360, hls[2] * 100, hls[1] * 100)
 
 def _compareHsl(a, b):
-    # return abs(a[0]-b[0]) + abs(a[1]-b[1]) + abs(a[2]-b[2])
-    hsl1 = HSLColor(a[0] / 360, hsl_s=a[1] / 100, hsl_l=a[2] / 100)
-    hsl2 = HSLColor(b[0] / 360, hsl_s=b[1] / 100, hsl_l=b[2] / 100)
-    lab1 = convert_color(hsl1, LabColor)
-    lab2 = convert_color(hsl2, LabColor)
-    return delta_e_cie1976(lab1, lab2)
+    return abs(a[0]-b[0]) + abs(a[1]-b[1]) + abs(a[2]-b[2])
+    # hsl1 = HSLColor(a[0] / 360, hsl_s=a[1] / 100, hsl_l=a[2] / 100)
+    # hsl2 = HSLColor(b[0] / 360, hsl_s=b[1] / 100, hsl_l=b[2] / 100)
+    # lab1 = convert_color(hsl1, LabColor)
+    # lab2 = convert_color(hsl2, LabColor)
+    # return delta_e_cie1976(lab1, lab2)
 
 COLOR_RANGE_HSL = [nmToHsl(i) for i in range (380, 781)]
 
