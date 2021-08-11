@@ -21,13 +21,36 @@ def compareHexColors(a, b):
     RANGES = range(0, 361, 30)
     hsl1, hsl2 = _hexColorToHsl(a), _hexColorToHsl(b)
 
-    for i in RANGES:
-        if hsl1[0]>=i and hsl1[0]<i+30 and hsl2[0]>=i and hsl2[0]<i+30 and hsl1[0]>hsl2[0]:
-            return 1
-    if hsl1[2]!=b[2] and hsl1[2]<hsl2[2]:
-        return -1 
+    if hsl1[0] > hsl2[0]:
+        return 1
+    elif hsl1[0] < hsl2[0]:
+        return -1
     else:
         return 0
+
+    # # if they're in the same range (each 30°)
+    # for i in RANGES:
+    #     if hsl1[0]>=i and hsl1[0]<i+30 and hsl2[0]>=i and hsl2[0]<i+30:
+    #         if hsl1[0]>hsl2[0]:
+    #             return 1
+    #         elif hsl1[0]<hsl2[0]:
+    #             return -1
+    #         else:
+    #             return 0
+    # # otherwise compare lightness
+    # if hsl1[1]>hsl2[1]:
+    #     return 1
+    # elif hsl1[1]<hsl2[1]:
+    #     return -1 
+    # else:
+    #     return 0
+    # # otherwise compare saturation
+    # if hsl1[2]>hsl2[2]:
+    #     return 1
+    # if hsl1[2]<hsl2[2]:
+    #     return -1
+    # else:
+    #     return 0
 
 # COLOR_RANGE_HSL = [nmToHsl(i) for i in range (380, 781)]
 

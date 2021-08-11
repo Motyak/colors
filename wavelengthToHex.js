@@ -1,4 +1,4 @@
-
+// source from https://academo.org/demos/wavelength-to-colour-relationship/
 
 function nmToRGB(wavelength){
     var Gamma = 0.80,
