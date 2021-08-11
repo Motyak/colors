@@ -44,10 +44,8 @@ def _isInSpectrum(wavelength):
     return wavelength >= 380 and wavelength <= 780
 
 def nmToRgb(wavelength):
-    # red = green = blue = 0.0
-
-    if not _isInSpectrum(wavelength):
-        return
+    # if not _isInSpectrum(wavelength):
+    #     return
     
     red, green, blue = _applyAndConvertToRgb(_getFactor(wavelength), _getRgbDec(wavelength))
 
@@ -60,8 +58,8 @@ def nmToHex(wavelength):
     return _rgbToHexColor(nmToRgb(wavelength))
 
 def nmToHsl(wavelength):
-    if not _isInSpectrum(wavelength):
-        return
+    # if not _isInSpectrum(wavelength):
+    #     return
 
     red, green, blue =  _apply(_getFactor(wavelength), _getRgbDec(wavelength))
     hls = rgb_to_hls(red, green, blue)

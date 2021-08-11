@@ -24,16 +24,16 @@ def _compareHsl(a, b):
     lab2 = convert_color(hsl2, LabColor)
     return delta_e_cie1976(lab1, lab2)
 
+COLOR_RANGE_HSL = [nmToHsl(i) for i in range (380, 781)]
 
 # fonction qui retourne la longueur d'onde la plus proche du code hex
 def closestWavelength(hexColor):
     hslInput = _hexColorToHsl(hexColor)
-    colorRangeHsl = [nmToHsl(i) for i in range (380, 781)]
     closestHsl = (-1, -1, -1)
     closestWavelength = -1
     smallestDeltaE = 999999
     
-    for index, c in enumerate(colorRangeHsl):
+    for index, c in enumerate(COLOR_RANGE_HSL):
         diff = _compareHsl(hslInput, c)
         if diff < smallestDeltaE:
             # print("smallest was", smallestDeltaE, "now it's", diff)#debug
@@ -46,8 +46,8 @@ def closestWavelength(hexColor):
 
 if __name__ == '__main__':
     # print(_hexColorToHsl("#142857"))
-    # print(_compareHsl(nmToHsl(500), nmToHsl(382)))
-    print(closestWavelength("#593406"))
+    print(_compareHsl(nmToHsl(500), nmToHsl(382)))
+    # print(closestWavelength("#593406"))
 
 
 
