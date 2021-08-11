@@ -31,23 +31,23 @@ def closestWavelength(hexColor):
     hslInput = _hexColorToHsl(hexColor)
     closestHsl = (-1, -1, -1)
     closestWavelength = -1
-    smallestDeltaE = 999999
+    smallestDifference = 999999
     
     for index, c in enumerate(COLOR_RANGE_HSL):
         diff = _compareHsl(hslInput, c)
-        if diff < smallestDeltaE:
-            # print("smallest was", smallestDeltaE, "now it's", diff)#debug
+        if diff < smallestDifference:
+            # print("smallest was", smallestDifference, "now it's", diff)#debug
             closestHsl = c
             closestWavelength = index + 380
-            smallestDeltaE = diff
+            smallestDifference = diff
         # print(c, diff)#debug
 
     return closestWavelength
 
 if __name__ == '__main__':
-    # print(_hexColorToHsl("#142857"))
+    print(_hexColorToHsl("#142857"))
     print(_compareHsl(nmToHsl(500), nmToHsl(382)))
-    # print(closestWavelength("#593406"))
+    print(closestWavelength("#593406"))
 
 
 
