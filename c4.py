@@ -1,11 +1,22 @@
 #!/usr/bin/env python3
 from c import nmToRgb
 
+from colorsys import rgb_to_hls
 from colormath.color_objects import sRGBColor, LabColor
 from colormath.color_conversions import convert_color
 from colormath.color_diff import delta_e_cie1976
+from functools import cmp_to_key
 
-#!/usr/bin/env python3
+# hex string to HSL
+def _hexColorToHsl(str):
+    tmp = str[1:7]
+    red = int(tmp[:2], 16) / 256
+    green = int(tmp[2:4], 16) / 256
+    blue = int(tmp[4:6], 16) / 256
+    hls = rgb_to_hls(red, green, blue)
+
+    # hls to proper hsl
+    return (hls[0] * 360, hls[2] * 100, hls[1] * 100)
 
 # hex string to RGB
 def _hexColorToRgb(str):
@@ -21,7 +32,6 @@ def _compareRgb(a, b):
     rgb2 = sRGBColor(b[0], b[1], b[2], True)
     lab1 = convert_color(rgb1, LabColor)
     lab2 = convert_color(rgb2, LabColor)
-
     return delta_e_cie1976(lab1, lab2)
 
 # wavelength converted to sRGB
@@ -43,10 +53,45 @@ def closestWavelength(hexColor):
 
     return closestWavelength
 
-if __name__ == '__main__':
-    print(_hexColorToRgb("#175824"))
-    print(_compareRgb((46,209,192), (32,203,230)))
-    print(closestWavelength("#175824"))
+# where a and b are both pair items with hex color & wavelength
+def compareColors(a, b):
+    # d'abord la longueur d'onde la plus proche
+    if a[1] > b[1]:
+        return 1
+    if a[1] < b[1]:
+        return -1
+    # puis la valeur hue
+    if _hexColorToHsl(a[0])[0] > _hexColorToHsl(b[0])[0]:
+        return 1
+    if _hexColorToHsl(a[0])[0] < _hexColorToHsl(b[0])[0]:
+        return -1
+    # puis la valeur saturation
+    if _hexColorToHsl(a[0])[1] > _hexColorToHsl(b[0])[1]:
+        return 1
+    if _hexColorToHsl(a[0])[1] < _hexColorToHsl(b[0])[1]:
+        return -1
+    # et enfin la valeur lightness
+    if _hexColorToHsl(a[0])[2] > _hexColorToHsl(b[0])[2]:
+        return 1
+    if _hexColorToHsl(a[0])[2] < _hexColorToHsl(b[0])[2]:
+        return -1
+    return 0
+
+def _nbToHexColor(nb):
+    return '#%06d' % nb
+
+def _sumOfDigits(n):
+    return sum([int(i) for i in str(n)])
+
+seq = [i*999999//91 for i in range(1,91) if i%10!=0 and _sumOfDigits(i)<10]
+colors = {key: closestWavelength(key) for key in [*map(_nbToHexColor, seq)]}
+sortedColors = {k: v for k,v in sorted(colors.items(), key=cmp_to_key(compareColors))}
+
+# print(closestWavelength("#142857"))
+
+for k,v in sortedColors.items():
+    print(k)
+    # print(k, v)
 
 
 
