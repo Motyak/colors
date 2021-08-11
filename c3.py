@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from c2 import compareHexColors
+from c2 import closestWavelength
 
 from functools import cmp_to_key
 
@@ -9,9 +9,14 @@ def nbToHexColor(nb):
 def sumOfDigits(n):
     return sum([int(i) for i in str(n)])
 
-seq = [i*999999//91 for i in range(1,91) if i%10!=0 and sumOfDigits(i)<10]
-hexColors = [*map(nbToHexColor, seq)]
-sortedHexColors = [*sorted(hexColors, key=cmp_to_key(compareHexColors))]
+def compareAsWavelengths(hsl1, hsl2):
+    return closestWavelength(hsl1) < closestWavelength(hsl2)
 
-for c in sortedHexColors:
-    print(c)
+seq = [i*999999//91 for i in range(1,91) if i%10!=0 and sumOfDigits(i)<10]
+colors = {key: closestWavelength(key) for key in [*map(nbToHexColor, seq)]}
+sortedColors = {k: v for k,v in sorted(colors.items(), key=lambda item: item[1])}
+
+for k,v in sortedColors.items():
+    print(k)
+    # print(k, v)
+

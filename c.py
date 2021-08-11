@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 from colorsys import rgb_to_hls
-from math import pi as PI
 
 _rgb = {
     440: lambda x: (-(x-440)/(440-380),0.0,1.0),
@@ -44,9 +43,6 @@ def _isInSpectrum(wavelength):
     return wavelength >= 380 and wavelength <= 780
 
 def nmToRgb(wavelength):
-    # if not _isInSpectrum(wavelength):
-    #     return
-    
     red, green, blue = _applyAndConvertToRgb(_getFactor(wavelength), _getRgbDec(wavelength))
 
     return (int(red),int(green),int(blue))
@@ -58,9 +54,6 @@ def nmToHex(wavelength):
     return _rgbToHexColor(nmToRgb(wavelength))
 
 def nmToHsl(wavelength):
-    # if not _isInSpectrum(wavelength):
-    #     return
-
     red, green, blue =  _apply(_getFactor(wavelength), _getRgbDec(wavelength))
     hls = rgb_to_hls(red, green, blue)
 

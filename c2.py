@@ -17,65 +17,32 @@ def _hexColorToHsl(str):
     # hls to proper hsl
     return (hls[0] * 360, hls[2] * 100, hls[1] * 100)
 
-def compareHexColors(a, b):
-    RANGES = range(0, 361, 30)
-    hsl1, hsl2 = _hexColorToHsl(a), _hexColorToHsl(b)
+def _compareHsl(a, b):
+    return abs(a[0]-b[0])
 
-    if hsl1[0] > hsl2[0]:
-        return 1
-    elif hsl1[0] < hsl2[0]:
-        return -1
-    else:
-        return 0
+COLOR_RANGE_HSL = [nmToHsl(i) for i in range (380, 781)]
 
-    # # if they're in the same range (each 30°)
-    # for i in RANGES:
-    #     if hsl1[0]>=i and hsl1[0]<i+30 and hsl2[0]>=i and hsl2[0]<i+30:
-    #         if hsl1[0]>hsl2[0]:
-    #             return 1
-    #         elif hsl1[0]<hsl2[0]:
-    #             return -1
-    #         else:
-    #             return 0
-    # # otherwise compare lightness
-    # if hsl1[1]>hsl2[1]:
-    #     return 1
-    # elif hsl1[1]<hsl2[1]:
-    #     return -1 
-    # else:
-    #     return 0
-    # # otherwise compare saturation
-    # if hsl1[2]>hsl2[2]:
-    #     return 1
-    # if hsl1[2]<hsl2[2]:
-    #     return -1
-    # else:
-    #     return 0
-
-# COLOR_RANGE_HSL = [nmToHsl(i) for i in range (380, 781)]
-
-# # fonction qui retourne la longueur d'onde la plus proche du code hex
-# def closestWavelength(hexColor):
-#     hslInput = _hexColorToHsl(hexColor)
-#     closestHsl = (-1, -1, -1)
-#     closestWavelength = -1
-#     smallestDifference = 999999
+# fonction qui retourne la longueur d'onde la plus proche du code hex
+def closestWavelength(hexColor):
+    hslInput = _hexColorToHsl(hexColor)
+    closestHsl = (-1, -1, -1)
+    closestWavelength = -1
+    smallestDiff = 999999
     
-#     for index, c in enumerate(COLOR_RANGE_HSL):
-#         diff = _compareHsl(hslInput, c)
-#         if diff < smallestDifference:
-#             # print("smallest was", smallestDifference, "now it's", diff)#debug
-#             closestHsl = c
-#             closestWavelength = index + 380
-#             smallestDifference = diff
-#         # print(c, diff)#debug
+    for index, c in enumerate(COLOR_RANGE_HSL):
+        diff = _compareHsl(hslInput, c)
+        if diff < smallestDiff:
+            closestHsl = c
+            closestWavelength = index + 380
+            smallestDiff = diff
 
-#     return closestWavelength
+    return closestWavelength
 
 if __name__ == '__main__':
-    print(_hexColorToHsl("#142857"))
-    print(_compareHexColors("#142857", "#010989"))
-    # print(closestWavelength("#593406"))
+    # print(_hexColorToHsl("#142857"))
+    # print(_compareHsl(nmToHsl(500), nmToHsl(382)))
+    print(closestWavelength("#010989"))
+    pass
 
 
 
