@@ -1,60 +1,53 @@
 #!/usr/bin/env python3
-from c import nmToRgb
+from c import nmToHsl
 
-def _hexColorToRgb(str):
+from colorsys import rgb_to_hls
+from colormath.color_objects import HSLColor, LabColor
+from colormath.color_conversions import convert_color
+from colormath.color_diff import delta_e_cie1976
+
+# hex string to HSL
+def _hexColorToHsl(str):
     tmp = str[1:7]
-    a = int(tmp[:2], 16)
-    b = int(tmp[2:4], 16)
-    c = int(tmp[4:6], 16)
-    return (a, b, c)
+    red = int(tmp[:2], 16) / 256
+    green = int(tmp[2:4], 16) / 256
+    blue = int(tmp[4:6], 16) / 256
+    hls = rgb_to_hls(red, green, blue)
 
-def _getMatchingColorRange(rgb):
-    #      (r=0/g=1/b=1,  value)
-    highest = (-1, -999999)
+    # hls to proper hsl
+    return (hls[0] * 360, hls[2] * 100, hls[1] * 100)
 
-    for i, c in enumerate(rgb):
-        if c > highest[1]:
-            highest = (i, c)
-    
-    # red
-    if highest[0] == 0:
-        return range(580, 701)
-    # green
-    elif highest[0] == 1:
-        return range(490, 581)
-    # blue
-    elif highest[0] == 2:
-        return range(420, 491)
-
-    return []
-
-# returns the average delta between r, g and b
-def _howmuchdifference(rgb1, rgb2):
-    sum = 0.0
-    for i in range(3):
-        sum += abs(rgb1[i]-rgb2[i])
-    return sum
+def _compareHsl(a, b):
+    hsl1 = HSLColor(a[0] / 360, hsl_s=a[1] / 100, hsl_l=a[2] / 100)
+    hsl2 = HSLColor(b[0] / 360, hsl_s=b[1] / 100, hsl_l=b[2] / 100)
+    lab1 = convert_color(hsl1, LabColor)
+    lab2 = convert_color(hsl2, LabColor)
+    return delta_e_cie1976(lab1, lab2)
 
 
 # fonction qui retourne la longueur d'onde la plus proche du code hex
 def closestWavelength(hexColor):
-    rgbInput = _hexColorToRgb(hexColor)
-    colorRangeNm = [*_getMatchingColorRange(rgbInput)]
-    colorRangeRgb = [*map(lambda x: nmToRgb(x), colorRangeNm)]
-
-    closestRGB = (-1, -1, -1)
+    hslInput = _hexColorToHsl(hexColor)
+    colorRangeHsl = [nmToHsl(i) for i in range (380, 781)]
+    closestHsl = (-1, -1, -1)
     closestWavelength = -1
-    smallestDifference = 999999
+    smallestDeltaE = 999999
     
-    for index, c in enumerate(colorRangeRgb):
-        diff = _howmuchdifference(rgbInput, c)
-        if diff < smallestDifference:
-            closestRGB = c
-            closestWavelength = index + colorRangeNm[0]
-            smallestDifference = diff
+    for index, c in enumerate(colorRangeHsl):
+        diff = _compareHsl(hslInput, c)
+        if diff < smallestDeltaE:
+            # print("smallest was", smallestDeltaE, "now it's", diff)#debug
+            closestHsl = c
+            closestWavelength = index + 380
+            smallestDeltaE = diff
+        # print(c, diff)#debug
 
     return closestWavelength
 
 if __name__ == '__main__':
-    print(closestWavelength("#285714"))
+    # print(_hexColorToHsl("#142857"))
+    # print(_compareHsl(nmToHsl(500), nmToHsl(382)))
+    print(closestWavelength("#593406"))
+
+
 
