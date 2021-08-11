@@ -2,9 +2,6 @@
 from c import nmToHsl
 
 from colorsys import rgb_to_hls
-from colormath.color_objects import HSLColor, LabColor
-from colormath.color_conversions import convert_color
-from colormath.color_diff import delta_e_cie1976
 
 # hex string to HSL
 def _hexColorToHsl(str):
@@ -18,7 +15,7 @@ def _hexColorToHsl(str):
     return (hls[0] * 360, hls[2] * 100, hls[1] * 100)
 
 def _compareHsl(a, b):
-    return abs(a[0]-b[0])
+    return abs(a[0]-b[0]) + abs(a[1]-b[1]) + abs(a[2]-b[2])
 
 COLOR_RANGE_HSL = [nmToHsl(i) for i in range (380, 781)]
 
@@ -38,11 +35,24 @@ def closestWavelength(hexColor):
 
     return closestWavelength
 
+# Je me fais un kif
+
+def nbToHexColor(nb):
+    return '#%06d' % nb
+
+def sumOfDigits(n):
+    return sum([int(i) for i in str(n)])
+
 if __name__ == '__main__':
     # print(_hexColorToHsl("#142857"))
     # print(_compareHsl(nmToHsl(500), nmToHsl(382)))
-    print(closestWavelength("#010989"))
-    pass
+    # print(closestWavelength("#175824"))
+
+    seq = [i*999999//91 for i in range(1,91) if i%10!=0 and sumOfDigits(i)<10]
+    seq = [*map(nbToHexColor, seq)]
+
+    for i in seq:
+        print(i, closestWavelength(i))
 
 
 
